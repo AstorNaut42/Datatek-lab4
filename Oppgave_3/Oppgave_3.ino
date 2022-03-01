@@ -22,35 +22,46 @@ void setup() {
 
   delay(1000);
 
-  for (int speed = 0; speed <= 400; speed++)
-  {
-    motors.setSpeeds(speed, speed);
-    linesensor.calibrate();
-    delay(1);
-  }
 
-  for (int speed = 400; speed >= 0; speed--)
-  {
-    motors.setSpeeds(speed, speed);
-    linesensor.calibrate();
-    delay(1);
-  }
 }
 
 
+void calibrate() {
 
+  for (int i = 0; i < 150; i++) {
+
+    linesensor.calibrate();
+
+    if (i < 50) {
+      motors.setSpeeds(200, 200);
+    }
+
+    if (i > 50 && i < 100) {
+      motors.setSpeeds(0, 0);
+    }
+
+    if (i > 100) {
+      motors.setSpeeds(-200, -200);
+    }
+  }
+  motors.setSpeeds(0, 0);
+
+
+}
 
 
 void loop() {
 
   positions = linesensor.readLine(linesensorValues);
 
+  calibrate();
+
 
   display.clear();
   display.gotoXY(0, 1);
-  display.print(F("Hei"));
+  display.print(positions);
 
-  delay(300);
+  delay(5000);
 
 
 }
